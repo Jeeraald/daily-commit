@@ -1,0 +1,28 @@
+name: Daily Commit
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update timestamp
+        run: date > timestamp.txt
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "jeeraald"
+          git config --global user.email "jerald.menoza@ustp.edu.ph"
+
+          git add timestamp.txt
+          git commit -m "Daily auto commit" || echo "Nothing to commit"
+          git push
