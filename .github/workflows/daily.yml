@@ -1,8 +1,8 @@
-name: Daily Commit
+name: Random Daily Commits
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * *" # Every day at 12:00 AM UTC
   workflow_dispatch:
 
 permissions:
@@ -13,16 +13,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Update timestamp
-        run: date > timestamp.txt
-
-      - name: Commit changes
+      - name: Configure Git
         run: |
-          git config --global user.name "jeeraald"
+          git config --global user.name "Jeeraald"
           git config --global user.email "jerald.menoza@ustp.edu.ph"
 
-          git add timestamp.txt
-          git commit -m "Daily auto commit" || echo "Nothing to commit"
+      - name: Make Random Commits
+        run: |
+          COUNT=$((RANDOM % 8 + 1))
+          echo "Today's commits: $COUNT"
+
+          for ((i=1; i<=COUNT; i++)); do
+            echo "$(date) - Random commit $i" >> activity.log
+            git add activity.log
+
+            MESSAGES=(
+              "Update project"
+              "Refactor code"
+              "Improve documentation"
+              "Fix minor issue"
+              "Update files"
+              "Maintenance"
+              "Code cleanup"
+              "Project update"
+            )
+
+            MSG=${MESSAGES[$RANDOM % ${#MESSAGES[@]}]}
+
+            git commit -m "$MSG"
+          done
+
           git push
