@@ -23,7 +23,7 @@ jobs:
 
       - name: Make Random Commits
         run: |
-          COUNT=$((RANDOM % 8 + 1))
+          COUNT=$((RANDOM % 16 + 10))
           echo "Today's commits: $COUNT"
 
           for ((i=1; i<=COUNT; i++)); do
